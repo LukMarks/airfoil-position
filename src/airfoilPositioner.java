@@ -20,12 +20,11 @@ public class airfoilPositioner {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Please enter with the name of the airfoil (with extension)");
+        System.out.println("Please enter with: ");
+        System.out.println("The name of the airfoil (with extension)");
         //System.out.print("Airfoil's name: ");
         String airfoilName = scanner.nextLine();
 
-
-        //TODO - Fix multiplication e.g. 10.75 to 1075.0
         System.out.println("Chord: ");
         double chord = scanner.nextDouble();
         scanner.nextLine(); // handle enter key issue
@@ -41,7 +40,6 @@ public class airfoilPositioner {
         System.out.println(planeDistance);
 
         scanner.close();
-
     }
 
 }
