@@ -17,7 +17,7 @@ public class airfoilPositioner {
 
     //private Scanner x;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         System.out.println("===============================");
         System.out.println(" Welcome to Airfoil Positioner");
@@ -45,18 +45,30 @@ public class airfoilPositioner {
         System.out.println(planeDistance);
         scanner.close();*/
 
-       // String[] lines = Files.readAllLines(new File("clarky.dat").toPath()).toArray(new String[0]);
+        // String[] lines = Files.readAllLines(new File("clarky.dat").toPath()).toArray(new String[0]);
 
         //System.out.println(lines);
 
-       /* File airfoil = new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
+      File airfoil = new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
+      try {
+          Scanner airfoilFile = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
+          while(airfoilFile.hasNext()){
+              String a = airfoilFile.next();
+              String b = airfoilFile.next();
+          }
+
+          airfoilFile.close();
+      } catch (Exception e) {
+          System.out.println("Could not find the file");
+      }
+
 
 /*
         Scanner scnr = new Scanner(airfoil);
         while(scnr.hasNextLine()){
             String line = scnr.nextLine();
             System.out.println(line);
-        }*/
+        }
         Scanner x;
         try{
             x = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
@@ -72,7 +84,7 @@ public class airfoilPositioner {
         }
 
         x.close();
-    }
+    }*/
 
   /*  public void openFile(){
         try{
@@ -95,9 +107,10 @@ public class airfoilPositioner {
     public void closeFile(){
         x.close();
     }*/
+    }
 
     public double[][] rotationalMatrix(double[][] airfoil, double chord, double angle){
-        double[][] rotateAirfoil = new double[2][];
+        double[][] rotatedAirfoil = new double[2][];
 
         for(int i=0;i< airfoil.length;i++){
 
@@ -105,11 +118,10 @@ public class airfoilPositioner {
 
             double zLocal = chord*0.25;
 
-            rotateAirfoil[1][i] = airfoil[1][i]*Math.cos(angleRad)*(chord-zLocal) + airfoil[2][i]*Math.sin(angleRad)*chord;
-            rotateAirfoil[2][i] = (airfoil[2][i]*Math.cos(angleRad)-airfoil[1][i]*Math.sin(angleRad))*chord;
-
+            rotatedAirfoil[1][i] = airfoil[1][i]*Math.cos(angleRad)*(chord-zLocal) + airfoil[2][i]*Math.sin(angleRad)*chord;
+            rotatedAirfoil[2][i] = (airfoil[2][i]*Math.cos(angleRad)-airfoil[1][i]*Math.sin(angleRad))*chord;
         }
-        return(rotateAirfoil);
+        return rotatedAirfoil;
     }
 
     public void saveAirfoil(double[][] airfoil, double z, String name){
