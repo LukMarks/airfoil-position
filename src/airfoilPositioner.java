@@ -8,9 +8,12 @@
 **==============================
 * */
 
+import java.io.File;
 import java.util.Scanner;
 
 public class airfoilPositioner {
+
+    //private Scanner x;
 
     public static void main(String[] args){
 
@@ -18,7 +21,7 @@ public class airfoilPositioner {
         System.out.println(" Welcome to Airfoil Positioner");
         System.out.println("===============================");
 
-        Scanner scanner = new Scanner(System.in);
+        /*Scanner scanner = new Scanner(System.in);
 
         System.out.println("Please enter with: ");
         System.out.println("The name of the airfoil (with extension)");
@@ -29,7 +32,7 @@ public class airfoilPositioner {
         double chord = scanner.nextDouble();
         scanner.nextLine(); // handle enter key issue
 
-       System.out.println("Angle of Attack: ");
+        System.out.println("Angle of Attack: ");
         double angleAttack = scanner.nextDouble();
         scanner.nextLine(); // handle enter key issue
 
@@ -38,8 +41,73 @@ public class airfoilPositioner {
         scanner.nextLine(); // handle enter key issue
 
         System.out.println(planeDistance);
+        scanner.close();*/
 
-        scanner.close();
+       // String[] lines = Files.readAllLines(new File("clarky.dat").toPath()).toArray(new String[0]);
+
+        //System.out.println(lines);
+
+       /* File airfoil = new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
+
+/*
+        Scanner scnr = new Scanner(airfoil);
+        while(scnr.hasNextLine()){
+            String line = scnr.nextLine();
+            System.out.println(line);
+        }*/
+        Scanner x;
+        try{
+            x = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
+        }
+        catch(Exception e){
+            System.out.println("Could not find the file");
+        }
+        while(x.hasNext()){
+            String a = x.next();
+            String b = x.next();
+
+            System.out.println(a+"  "+b);
+        }
+
+        x.close();
+    }
+
+  /*  public void openFile(){
+        try{
+            x = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
+        }
+        catch(Exception e){
+            System.out.println("Could not find the file");
+        }
+    }
+
+    public void readFile(){
+        while(x.hasNext()){
+            String a = x.next();
+            String b = x.next();
+
+            System.out.println(a+"  "+b);
+        }
+    }
+
+    public void closeFile(){
+        x.close();
+    }*/
+
+    public double[][] rotationalMatrix(double[][] airfoil, double chord, double angle){
+        double[][] rotateAirfoil = new double[2][];
+
+        for(int i=0;i< airfoil.length;i++){
+
+            double angleRad = angle * Math.PI/180;
+
+            double zLocal = chord*0.25;
+
+            rotateAirfoil[1][i] = airfoil[1][i]*Math.cos(angleRad)*(chord-zLocal) + airfoil[2][i]*Math.sin(angleRad)*chord;
+            rotateAirfoil[2][i] = (airfoil[2][i]*Math.cos(angleRad)-airfoil[1][i]*Math.sin(angleRad))*chord;
+
+        }
+        return(rotateAirfoil);
     }
 
 }
