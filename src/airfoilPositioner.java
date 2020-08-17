@@ -9,6 +9,8 @@
 * */
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class airfoilPositioner {
@@ -108,6 +110,19 @@ public class airfoilPositioner {
 
         }
         return(rotateAirfoil);
+    }
+
+    public void saveAirfoil(double[][] airfoil, double z, String name){
+        String saveName = "rotated"+name;
+        try{
+            FileWriter saveFile = new FileWriter(saveName);
+            for(int i=0;i< airfoil.length;i++){
+                saveFile.write(airfoil[1][i]+"\t"+airfoil[2][i]+"\t"+z+"\n");
+            }
+        } catch(IOException e) {
+            System.out.println("An error occurred");
+            e.printStackTrace();
+        }
     }
 
 }
