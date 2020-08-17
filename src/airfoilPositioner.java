@@ -23,13 +23,14 @@ public class airfoilPositioner {
         System.out.println(" Welcome to Airfoil Positioner");
         System.out.println("===============================");
 
-        /*Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Please enter with: ");
         System.out.println("The name of the airfoil (with extension)");
         //System.out.print("Airfoil's name: ");
         String airfoilName = scanner.nextLine();
-
+        openAirfoil();
+        /*
         System.out.println("Chord: ");
         double chord = scanner.nextDouble();
         scanner.nextLine(); // handle enter key issue
@@ -49,19 +50,19 @@ public class airfoilPositioner {
 
         //System.out.println(lines);
 
-      File airfoil = new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
+    /*  File airfoil = new File(airfoilName);//"/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
       try {
           Scanner airfoilFile = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
           while(airfoilFile.hasNext()){
               String a = airfoilFile.next();
               String b = airfoilFile.next();
+              
           }
-
           airfoilFile.close();
       } catch (Exception e) {
           System.out.println("Could not find the file");
       }
-
+*/
 
 /*
         Scanner scnr = new Scanner(airfoil);
@@ -108,6 +109,26 @@ public class airfoilPositioner {
         x.close();
     }*/
     }
+
+    private static void openAirfoil() {
+    }
+
+    public void openAirfoil(String name){
+        //File airfoil = new File(name);//"/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
+        try {
+            Scanner airfoilFile = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
+            while(airfoilFile.hasNext()){
+                String a = airfoilFile.next();
+                String b = airfoilFile.next();
+
+            }
+            airfoilFile.close();
+        } catch (Exception e) {
+            System.out.println("Could not find the file");
+        }
+
+    }
+    
 
     public double[][] rotationalMatrix(double[][] airfoil, double chord, double angle){
         double[][] rotatedAirfoil = new double[2][];
