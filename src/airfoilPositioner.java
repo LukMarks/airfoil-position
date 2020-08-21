@@ -17,6 +17,8 @@ public class airfoilPositioner {
 
     //private Scanner x;
 
+    // TODO define getter and setter
+    
     public static void main(String[] args) {
 
         System.out.println("===============================");
