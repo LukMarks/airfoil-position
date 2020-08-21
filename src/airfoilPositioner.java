@@ -21,8 +21,8 @@ public class airfoilPositioner {
     private double chord;
     private double angleOfAttack;
     private double offset;
-    private  double span:
-    private boolean isWing;
+    private double span;
+    private String isWing;
     
     public static void main(String[] args) {
 
@@ -51,9 +51,18 @@ public class airfoilPositioner {
         newProfile.setSpan(scanner.nextDouble());
         scanner.nextLine(); // handle enter key issue
 
+        System.out.println("Offset: ");
+        newProfile.setOffset(scanner.nextDouble());
+        scanner.nextLine(); // handle enter key issue
+
+        System.out.println("Is it a section of a wing? (y/n)");
+        newProfile.setIsWing(scanner.nextLine());
+        scanner.nextLine(); // handle enter key issue
+
+
         scanner.close();
 
-        newProfile.openAirfoil();
+        newProfile.openAirfoil(newProfile.airfoilName);
 
         // String[] lines = Files.readAllLines(new File("clarky.dat").toPath()).toArray(new String[0]);
 
@@ -120,7 +129,7 @@ public class airfoilPositioner {
     }
 
 
-    public void openAirfoil(String name){
+    public void openAirfoil (String name){
         //File airfoil = new File(name);//"/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
         try {
             Scanner airfoilFile = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
@@ -142,11 +151,10 @@ public class airfoilPositioner {
 
         for(int i=0;i< airfoil.length;i++){
 
-            double angleRad = angle * Math.PI/180;
+            double angleRad = angleOfAttack * Math.PI/180;
+            shiftProfile();
 
-            double zLocal = chord*0.25;
-
-            rotatedAirfoil[1][i] = airfoil[1][i]*Math.cos(angleRad)*(chord-zLocal) + airfoil[2][i]*Math.sin(angleRad)*chord;
+            rotatedAirfoil[1][i] = airfoil[1][i]*Math.cos(angleRad)*(chord-offset) + airfoil[2][i]*Math.sin(angleRad)*chord;
             rotatedAirfoil[2][i] = (airfoil[2][i]*Math.cos(angleRad)-airfoil[1][i]*Math.sin(angleRad))*chord;
         }
         return rotatedAirfoil;
@@ -162,6 +170,12 @@ public class airfoilPositioner {
         } catch(IOException e) {
             System.out.println("An error occurred");
             e.printStackTrace();
+        }
+    }
+
+    public void shiftProfile(){
+        if(this.isWing == "n") {
+            this.offset = chord * 0.25 + this.offset;
         }
     }
 
@@ -186,8 +200,8 @@ public class airfoilPositioner {
         this.span = span;
     }
 
-    public void setIsWing(boolean isWing){
-        this.isWing = isWing;
+    public void setIsWing(String isWing){
+        this.isWing = isWing.toLowerCase();
     }
 
     // Define getters function
@@ -212,7 +226,7 @@ public class airfoilPositioner {
         return this.span;
     }
 
-    public boolean getIsWing(){
+    public String getIsWing(){
         return this.isWing;
     }
 }
