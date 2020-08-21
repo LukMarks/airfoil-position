@@ -21,6 +21,7 @@ public class airfoilPositioner {
     private double chord;
     private double angleOfAttack;
     private double offset;
+    private  double span:
     private boolean isWing;
     
     public static void main(String[] args) {
@@ -29,28 +30,30 @@ public class airfoilPositioner {
         System.out.println(" Welcome to Airfoil Positioner");
         System.out.println("===============================");
 
-        Scanner scanner = new Scanner(System.in);
+        airfoilPositioner newProfile = new airfoilPositioner();
+
+        Scanner scanner = new Scanner(System.in); // define scanner to read keyboad inputs
 
         System.out.println("Please enter with: ");
-        System.out.println("The name of the airfoil (with extension)");
-        //System.out.print("Airfoil's name: ");
-        String airfoilName = scanner.nextLine();
-        openAirfoil();
-        /*
+        System.out.println("The name(path) of the airfoil (with extension)");
+
+         newProfile.setAirfoilName(scanner.nextLine());
+
         System.out.println("Chord: ");
-        double chord = scanner.nextDouble();
+        newProfile.setChord(scanner.nextDouble());
         scanner.nextLine(); // handle enter key issue
 
         System.out.println("Angle of Attack: ");
-        double angleAttack = scanner.nextDouble();
+        newProfile.setAngleOfAttack(scanner.nextDouble());
         scanner.nextLine(); // handle enter key issue
 
         System.out.println("Distance From Root: ");
-        double planeDistance = scanner.nextDouble();
+        newProfile.setSpan(scanner.nextDouble());
         scanner.nextLine(); // handle enter key issue
 
-        System.out.println(planeDistance);
-        scanner.close();*/
+        scanner.close();
+
+        newProfile.openAirfoil();
 
         // String[] lines = Files.readAllLines(new File("clarky.dat").toPath()).toArray(new String[0]);
 
@@ -116,8 +119,6 @@ public class airfoilPositioner {
     }*/
     }
 
-    private static void openAirfoil() {
-    }
 
     public void openAirfoil(String name){
         //File airfoil = new File(name);//"/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
@@ -136,7 +137,7 @@ public class airfoilPositioner {
     }
     
 
-    public double[][] rotationalMatrix(double[][] airfoil, double chord, double angle){
+    public double[][] rotationalMatrix(double[][] airfoil){
         double[][] rotatedAirfoil = new double[2][];
 
         for(int i=0;i< airfoil.length;i++){
@@ -151,12 +152,12 @@ public class airfoilPositioner {
         return rotatedAirfoil;
     }
 
-    public void saveAirfoil(double[][] airfoil, double z, String name){
-        String saveName = "rotated"+name;
+    public void saveAirfoil(double[][] airfoil){
+        String saveName = "rotated"+airfoilName;
         try{
             FileWriter saveFile = new FileWriter(saveName);
             for(int i=0;i< airfoil.length;i++){
-                saveFile.write(airfoil[1][i]+"\t"+airfoil[2][i]+"\t"+z+"\n");
+                saveFile.write(airfoil[1][i]+"\t"+airfoil[2][i]+"\t"+span+"\n");
             }
         } catch(IOException e) {
             System.out.println("An error occurred");
@@ -181,11 +182,15 @@ public class airfoilPositioner {
         this.offset = offset;
     }
 
+    public void setSpan(double span){
+        this.span = span;
+    }
+
     public void setIsWing(boolean isWing){
         this.isWing = isWing;
     }
 
-    // Define gettets function
+    // Define getters function
 
     public String getAirfoilName(){
         return this.airfoilName;
@@ -201,6 +206,10 @@ public class airfoilPositioner {
 
     public double getOffset(){
         return this.offset;
+    }
+
+    public double getSpan() {
+        return this.span;
     }
 
     public boolean getIsWing(){
