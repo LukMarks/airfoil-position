@@ -15,9 +15,13 @@ import java.util.Scanner;
 
 public class airfoilPositioner {
 
-    //private Scanner x;
 
     // TODO define getter and setter
+    private String airfoilName;
+    private double chord;
+    private double angleOfAttack;
+    private double offset;
+    private boolean isWing;
     
     public static void main(String[] args) {
 
@@ -160,4 +164,46 @@ public class airfoilPositioner {
         }
     }
 
+    // Define the setters functions
+    public void setAirfoilName(String airfoilName){
+        this.airfoilName = airfoilName;
+    }
+
+    public void setChord(double chord){
+        this.chord = chord;
+    }
+
+    public void setAngleOfAttack(double angleOfAttack){
+        this.angleOfAttack = angleOfAttack;
+    }
+
+    public void setOffset(double offset){
+        this.offset = offset;
+    }
+
+    public void setIsWing(boolean isWing){
+        this.isWing = isWing;
+    }
+
+    // Define gettets function
+
+    public String getAirfoilName(){
+        return this.airfoilName;
+    }
+
+    public double getChord(){
+        return this.chord;
+    }
+
+    public double getAngleOfAttack(){
+        return this.angleOfAttack;
+    }
+
+    public double getOffset(){
+        return this.offset;
+    }
+
+    public boolean getIsWing(){
+        return this.isWing;
+    }
 }
