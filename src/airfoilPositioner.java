@@ -8,10 +8,10 @@
 **==============================
 * */
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class airfoilPositioner {
 
@@ -31,7 +31,7 @@ public class airfoilPositioner {
         System.out.println("===============================");
 
         airfoilPositioner newProfile = new airfoilPositioner();
-
+/*
         Scanner scanner = new Scanner(System.in); // define scanner to read keyboad inputs
 
         System.out.println("Please enter with: ");
@@ -61,90 +61,30 @@ public class airfoilPositioner {
 
 
         scanner.close();
-
-        newProfile.openAirfoil(newProfile.airfoilName);
-
-        // String[] lines = Files.readAllLines(new File("clarky.dat").toPath()).toArray(new String[0]);
-
-        //System.out.println(lines);
-
-    /*  File airfoil = new File(airfoilName);//"/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
-      try {
-          Scanner airfoilFile = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
-          while(airfoilFile.hasNext()){
-              String a = airfoilFile.next();
-              String b = airfoilFile.next();
-              
-          }
-          airfoilFile.close();
-      } catch (Exception e) {
-          System.out.println("Could not find the file");
-      }
 */
+        newProfile.setAirfoilName("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
+        newProfile.openAirfoilFile(newProfile.airfoilName);
 
-/*
-        Scanner scnr = new Scanner(airfoil);
-        while(scnr.hasNextLine()){
-            String line = scnr.nextLine();
-            System.out.println(line);
-        }
-        Scanner x;
-        try{
-            x = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
-        }
-        catch(Exception e){
-            System.out.println("Could not find the file");
-        }
-        while(x.hasNext()){
-            String a = x.next();
-            String b = x.next();
-
-            System.out.println(a+"  "+b);
-        }
-
-        x.close();
-    }*/
-
-  /*  public void openFile(){
-        try{
-            x = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
-        }
-        catch(Exception e){
-            System.out.println("Could not find the file");
-        }
-    }
-
-    public void readFile(){
-        while(x.hasNext()){
-            String a = x.next();
-            String b = x.next();
-
-            System.out.println(a+"  "+b);
-        }
-    }
-
-    public void closeFile(){
-        x.close();
-    }*/
     }
 
 
-    public void openAirfoil (String name){
-        //File airfoil = new File(name);//"/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
-        try {
-            Scanner airfoilFile = new Scanner(new File("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat"));
-            while(airfoilFile.hasNext()){
-                String a = airfoilFile.next();
-                String b = airfoilFile.next();
+    public void openAirfoilFile(String fileName){
 
+        try(BufferedReader br = new BufferedReader(new FileReader(fileName))){
+            String line ="";
+
+
+            while((line = br.readLine()) != null){
+                String[] coord = line.split("\\s");
+                System.out.println(coord[0]+"\t"+coord[1]);
             }
-            airfoilFile.close();
-        } catch (Exception e) {
-            System.out.println("Could not find the file");
+
+        }catch(IOException e){
+            e.printStackTrace();
         }
 
+
     }
-    
 
     public double[][] rotationalMatrix(double[][] airfoil){
         double[][] rotatedAirfoil = new double[2][];
