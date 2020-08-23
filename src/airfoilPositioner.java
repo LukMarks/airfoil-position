@@ -8,10 +8,8 @@
 **==============================
 * */
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 
 public class airfoilPositioner {
 
@@ -23,7 +21,8 @@ public class airfoilPositioner {
     private double offset;
     private double span;
     private String isWing;
-    
+    private ArrayList<ArrayList<Double>> airfoilCoordinates = new ArrayList<>(2); // List that stores X and Y components
+
     public static void main(String[] args) {
 
         System.out.println("===============================");
@@ -72,14 +71,23 @@ public class airfoilPositioner {
 
         try(BufferedReader br = new BufferedReader(new FileReader(fileName))){
             String line ="";
-
-
+            double test;
+            initializerAirfoilCoordinates();
             while((line = br.readLine()) != null){
-                String[] coord = line.split("\\s");
-                System.out.println(coord[0]+"\t"+coord[1]);
-            }
+                String[] coord = line.split("\\s+");
+                //System.out.println(coord[0]+"\t"+coord[1]);
+                test = Double.parseDouble(coord[1]) + Double.parseDouble(coord[0]);
+                //System.out.println(test);
+                this.airfoilCoordinates.get(0).add(Double.parseDouble(coord[0]));
+                this.airfoilCoordinates.get(1).add(Double.parseDouble(coord[1]));
 
-        }catch(IOException e){
+            }
+            System.out.println(this.airfoilCoordinates);
+
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        catch(IOException e){
             e.printStackTrace();
         }
 
@@ -116,6 +124,12 @@ public class airfoilPositioner {
     public void shiftProfile(){
         if(this.isWing == "n") {
             this.offset = chord * 0.25 + this.offset;
+        }
+    }
+
+    public void initializerAirfoilCoordinates() {
+        for (int i=0; i < 2; i++) {
+            this.airfoilCoordinates.add(new ArrayList());
         }
     }
 
