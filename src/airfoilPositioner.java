@@ -22,6 +22,7 @@ public class airfoilPositioner {
     private double span;
     private String isWing;
     private ArrayList<ArrayList<Double>> airfoilCoordinates = new ArrayList<>(2); // List that stores X and Y components
+    private ArrayList<ArrayList<Double>> newAirfoilCoordinates = new ArrayList<>(2); // List that stores the rotated X and Y components
 
     public static void main(String[] args) {
 
@@ -62,8 +63,13 @@ public class airfoilPositioner {
         scanner.close();
 */
         newProfile.setAirfoilName("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
+        newProfile.setChord(10.0);
+        newProfile.setOffset(0);
+        newProfile.shiftProfile();
         newProfile.openAirfoilFile(newProfile.airfoilName);
-
+        newProfile.rotationalMatrix();
+        newProfile.saveAirfoil();
+        newProfile.saveAirfoil();
     }
 
 
@@ -80,9 +86,7 @@ public class airfoilPositioner {
                 //System.out.println(test);
                 this.airfoilCoordinates.get(0).add(Double.parseDouble(coord[0]));
                 this.airfoilCoordinates.get(1).add(Double.parseDouble(coord[1]));
-
             }
-            System.out.println(this.airfoilCoordinates);
 
         }catch(FileNotFoundException e){
             e.printStackTrace();
@@ -94,26 +98,29 @@ public class airfoilPositioner {
 
     }
 
-    public double[][] rotationalMatrix(double[][] airfoil){
-        double[][] rotatedAirfoil = new double[2][];
+    public void rotationalMatrix(){
+        //Apply the rotation matrix and the correct size to the airfoil.
 
-        for(int i=0;i< airfoil.length;i++){
-
+        double newX;
+        double newY;
+        initializerNewAirfoilCoordinates();
+        for(int i=0;i< this.airfoilCoordinates.get(1).size();i++){
             double angleRad = angleOfAttack * Math.PI/180;
-            shiftProfile();
 
-            rotatedAirfoil[1][i] = airfoil[1][i]*Math.cos(angleRad)*(chord-offset) + airfoil[2][i]*Math.sin(angleRad)*chord;
-            rotatedAirfoil[2][i] = (airfoil[2][i]*Math.cos(angleRad)-airfoil[1][i]*Math.sin(angleRad))*chord;
+            newX = this.airfoilCoordinates.get(0).get(i)*Math.cos(angleRad)*(this.chord-offset) + this.airfoilCoordinates.get(1).get(i)*Math.sin(angleRad)*this.chord;
+            newY = (this.airfoilCoordinates.get(1).get(i)*Math.cos(angleRad) - this.airfoilCoordinates.get(0).get(i)*Math.sin(angleRad))*this.chord;
+            this.newAirfoilCoordinates.get(0).add(newX);
+            this.newAirfoilCoordinates.get(1).add(newY);
         }
-        return rotatedAirfoil;
     }
 
-    public void saveAirfoil(double[][] airfoil){
-        String saveName = "rotated"+airfoilName;
+    public void saveAirfoil(){
+        String saveName = this.airfoilName;
+        System.out.println(saveName);
         try{
             FileWriter saveFile = new FileWriter(saveName);
-            for(int i=0;i< airfoil.length;i++){
-                saveFile.write(airfoil[1][i]+"\t"+airfoil[2][i]+"\t"+span+"\n");
+            for(int i=0;i< this.newAirfoilCoordinates.get(1).size();i++){
+                saveFile.write(this.newAirfoilCoordinates.get(0).get(i)+"\t"+this.newAirfoilCoordinates.get(0).get(i)+"\t"+this.span+"\n");
             }
         } catch(IOException e) {
             System.out.println("An error occurred");
@@ -130,6 +137,12 @@ public class airfoilPositioner {
     public void initializerAirfoilCoordinates() {
         for (int i=0; i < 2; i++) {
             this.airfoilCoordinates.add(new ArrayList());
+        }
+    }
+
+    public void initializerNewAirfoilCoordinates() {
+        for (int i=0; i < 2; i++) {
+            this.newAirfoilCoordinates.add(new ArrayList());
         }
     }
 
