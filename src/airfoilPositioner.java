@@ -10,11 +10,10 @@
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class airfoilPositioner {
 
-
-    // TODO define getter and setter
     private String airfoilName;
     private double chord;
     private double angleOfAttack;
@@ -31,7 +30,6 @@ public class airfoilPositioner {
         System.out.println("===============================");
 
         airfoilPositioner newProfile = new airfoilPositioner();
-/*
         Scanner scanner = new Scanner(System.in); // define scanner to read keyboad inputs
 
         System.out.println("Please enter with: ");
@@ -61,16 +59,21 @@ public class airfoilPositioner {
 
 
         scanner.close();
-*/
-        newProfile.setAirfoilName("/home/lucas/Github/airfoil-positioner/out/production/airfoil-positioner/clarky.dat");
+
+
+        // Test Param
+        /*newProfile.setAirfoilName("/clarky.dat");
         newProfile.setChord(10.0);
         newProfile.setOffset(0);
+        newProfile.setSpan(5.0);*/
+
         newProfile.shiftProfile();
         newProfile.openAirfoilFile(newProfile.airfoilName);
         newProfile.rotationalMatrix();
         newProfile.saveAirfoil();
-        newProfile.saveAirfoil();
+
     }
+
 
 
     public void openAirfoilFile(String fileName){
@@ -106,21 +109,28 @@ public class airfoilPositioner {
         initializerNewAirfoilCoordinates();
         for(int i=0;i< this.airfoilCoordinates.get(1).size();i++){
             double angleRad = angleOfAttack * Math.PI/180;
-
             newX = this.airfoilCoordinates.get(0).get(i)*Math.cos(angleRad)*(this.chord-offset) + this.airfoilCoordinates.get(1).get(i)*Math.sin(angleRad)*this.chord;
             newY = (this.airfoilCoordinates.get(1).get(i)*Math.cos(angleRad) - this.airfoilCoordinates.get(0).get(i)*Math.sin(angleRad))*this.chord;
             this.newAirfoilCoordinates.get(0).add(newX);
             this.newAirfoilCoordinates.get(1).add(newY);
         }
+
     }
 
     public void saveAirfoil(){
-        String saveName = this.airfoilName;
+
+        String saveName = (this.getAirfoilName().substring(this.getAirfoilName().lastIndexOf('/'), this.getAirfoilName().lastIndexOf('.')));
+
+        saveName = System.getProperty("user.dir") +"/rotated_"+saveName.substring(1)+".dat";
         System.out.println(saveName);
-        try{
-            FileWriter saveFile = new FileWriter(saveName);
-            for(int i=0;i< this.newAirfoilCoordinates.get(1).size();i++){
-                saveFile.write(this.newAirfoilCoordinates.get(0).get(i)+"\t"+this.newAirfoilCoordinates.get(0).get(i)+"\t"+this.span+"\n");
+
+        try (FileWriter writer = new FileWriter(saveName);
+             BufferedWriter bw = new BufferedWriter(writer)) {
+            String line = "";
+
+            for(int i=0;i< this.newAirfoilCoordinates.get(0).size();i++){
+                line = this.newAirfoilCoordinates.get(0).get(i)+"\t"+this.newAirfoilCoordinates.get(0).get(i)+"\t"+this.span+"\n";
+                bw.write(line);
             }
         } catch(IOException e) {
             System.out.println("An error occurred");
