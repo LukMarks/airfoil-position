@@ -93,13 +93,13 @@ program airfoilPosition
     end do
     
     
-    saveName = "retotate_"//airfoilName
+    saveName = "rotate_"//airfoilName
 
     open(20 ,file=saveName)
     
     DO i=1,nlinesDat
         !write(20,*) (rotateAirfoil(i,col),col=1,2), span
-        write(20,*) rotateAirfoil(i,1), rotateAirfoil(i,1), span
+        write(20,*) rotateAirfoil(i,1), rotateAirfoil(i,2), span
     end do
     
     close(20)
