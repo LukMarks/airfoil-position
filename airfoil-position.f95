@@ -54,7 +54,7 @@ program airfoilPosition
     print *, "Enter the span distance: "
     read(*,*) span
 
-    print *, "Do you wish to align the by:"   
+    print *, "Align by:"   
     print *," > 1/4 chord[1]"
     print *," > Offset[2]"
     print *," > Maximum Thickness[3]"
