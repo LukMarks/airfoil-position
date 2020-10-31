@@ -8,15 +8,15 @@ program airfoilPosition
 
     implicit none
     
-    real,dimension(200,2) :: airfoil, rotateAirfoil !variable to store .dat file points (x,y) coordenates
+    real,dimension(200,2) :: airfoil, rotateAirfoil, airfoilUpper, airfoilLower !variable to store .dat file points (x,y) coordenates
     real :: twistAngle = 0, radAngle = 0
     real :: chord = 0 
     real :: span = 0 ! distance between the root and the plane to be placed
-    real :: offset = 0, shift = 0
-    CHARACTER(LEN=2) :: alignment !variable that store if the new airfoil must be align by 1/4 chord length
+    real :: offset = 0, shift = 0, maxThickness =0, temp = 0
+    integer :: alignment !variable that store if the new airfoil must be align by 1/4 chord length
     CHARACTER(LEN=200) :: airfoilName
     CHARACTER(LEN=250) :: saveName
-    integer :: i, col
+    integer :: i, j, col, changePoint, maxThicknessPosition, difPoints
     integer :: nlinesDat  ! number of lines in the dat file
     REAL, PARAMETER :: Pi = 3.1415927
     
@@ -54,10 +54,15 @@ program airfoilPosition
     print *, "Enter the span distance: "
     read(*,*) span
 
-    print *, "Do you wish to align the new foil by a 1/4 chord? (y/n)"
+    print *, "Do you wish to align the by:"   
+    print *," > 1/4 chord[1]"
+    print *," > Offset[2]"
+    print *," > Maximum Thickness[3]"
+    print *," > None[4]"
+
     read(*,*) alignment
-    
-    if(alignment == "n") then
+
+    if(alignment == 2) then
         print *, "Enter the offset: "
         read(*,*) offset
     endif
@@ -77,15 +82,52 @@ program airfoilPosition
     
     close(10)
     
-    if(alignment == "n") then
-        shift = offset
-    else
+    print*, "CALCULATING..."
+
+    if(alignment == 1) then
         shift = chord *0.25
+    else if(alignment == 2) then
+        shift = offset
+    else if(alignment == 3) then
+        !Calc Max thickness
+        do i =2,nlinesDat
+            if(airfoil(i,1) < airfoil(i-1,1)) then
+                changePoint = i
+            end if
+            exit
+        end do
+
+        do i=1,changePoint
+            airfoilUpper(i,1) = airfoil(i,1)
+            airfoilUpper(i,2) = airfoil(i,2)
+        end do
+        
+        difPoints = nlinesDat-changePoint
+
+        do j=1,difPoints
+            do i=nlinesDat,changePoint,-1
+                airfoilLower(j,1) = airfoil(i,1)
+                airfoilLower(j,2) = airfoil(i,2)
+            end do
+        end do
+
+        do i=1,SIZE(airfoilUpper)
+            temp = abs(airfoilLower(i,2) - airfoilUpper(i,2))
+            if(temp > maxThickness) then
+                maxThickness = temp
+                maxThicknessPosition = i
+            end if
+        end do
+
+        shift = airfoil(maxThicknessPosition,1)*chord
+        
+    else
+        shift = 0
     endif
 
     radAngle = twistAngle*Pi/180
 
-    print*, "CALCULATING..."
+
 
     do i =1,nlinesDat
         rotateAirfoil(i,1) = (airfoil(i,1)*cos(radAngle)*chord)-shift + airfoil(i,2)*sin(radAngle)*chord
@@ -98,7 +140,6 @@ program airfoilPosition
     open(20 ,file=saveName)
     
     DO i=1,nlinesDat
-        !write(20,*) (rotateAirfoil(i,col),col=1,2), span
         write(20,*) rotateAirfoil(i,1), rotateAirfoil(i,2), span
     end do
     
