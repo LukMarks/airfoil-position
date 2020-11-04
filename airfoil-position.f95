@@ -86,9 +86,11 @@ program airfoilPosition
 
     if(alignment == 1) then
         shift = chord *0.25
-    else if(alignment == 2) then
+    endif
+    if(alignment == 2) then
         shift = offset
-    else if(alignment == 3) then
+    endif
+    if(alignment == 3) then
         !Calc Max thickness
         do i =2,nlinesDat
             if(airfoil(i,1) < airfoil(i-1,1)) then
@@ -112,7 +114,7 @@ program airfoilPosition
         end do
 
         do i=1,SIZE(airfoilUpper)
-            temp = abs(airfoilLower(i,2) - airfoilUpper(i,2))
+            temp = abs(airfoilUpper(i,2)-airfoilLower(i,2))
             if(temp > maxThickness) then
                 maxThickness = temp
                 maxThicknessPosition = i
@@ -120,8 +122,8 @@ program airfoilPosition
         end do
 
         shift = airfoil(maxThicknessPosition,1)*chord
-        
-    else
+    endif    
+    if(alignment == 4) then
         shift = 0
     endif
 
