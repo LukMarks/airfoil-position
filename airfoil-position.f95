@@ -132,7 +132,7 @@ program airfoilPosition
 
 
     do i =1,nlinesDat
-        rotateAirfoil(i,1) = (airfoil(i,1)*cos(radAngle)*chord)-shift + airfoil(i,2)*sin(radAngle)*chord
+        rotateAirfoil(i,1) = (airfoil(i,1)*chord-shift)*cos(radAngle) + airfoil(i,2)*sin(radAngle)*chord
         rotateAirfoil(i,2) = (airfoil(i,2)*cos(radAngle) - airfoil(i,1)*sin(radAngle)) * chord
     end do
     
